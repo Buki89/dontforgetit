@@ -1,5 +1,6 @@
 import React, { FC, useCallback, useState } from "react";
 import styled from "styled-components";
+import { useForm } from "./useForm";
 
 const Task = styled.div`
   display: flex;
@@ -17,9 +18,6 @@ export type TaskProps = {
   completed: boolean;
   deadline?: string;
   createdAt: string;
-  handleDeleleTask?: (id: string) => void;
-  handleChangeCompleted?: (id: string) => void;
-  handleChangeTaskName?: (id: string, newValue: string) => void;
 };
 const Title = styled.p<{ checked: boolean }>`
   font-size: 1.25rem;
@@ -29,17 +27,14 @@ const Title = styled.p<{ checked: boolean }>`
   margin-right: 2rem;
 `;
 
-const Item: FC<TaskProps> = ({
-  taskName,
-  completed,
-  id,
-  deadline,
-  handleDeleleTask,
-  handleChangeCompleted,
-  handleChangeTaskName,
-}) => {
+const Item: FC<TaskProps> = ({ taskName, completed, id, deadline }) => {
   const [edit, setEdit] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(taskName);
+  const {
+    handleChangeCompleted,
+    handleChangeTaskName,
+    handleDeleleTask,
+  } = useForm();
 
   const handleChange = useCallback(
     () => handleChangeCompleted && handleChangeCompleted(id),
@@ -66,6 +61,8 @@ const Item: FC<TaskProps> = ({
     },
     []
   );
+
+  console.log(taskName + "taks re render");
 
   return (
     <Task>

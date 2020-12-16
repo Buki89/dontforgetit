@@ -1,25 +1,11 @@
 import React, { FC } from "react";
 import styled from "styled-components";
+import * as CSS from "csstype";
 
 type BoxProps = {
   direction?: "row" | "column";
-  justifyContent?:
-    | "flex-start"
-    | "flex-end"
-    | "center"
-    | "space-between"
-    | "space-around"
-    | "space-evenly"
-    | "initial"
-    | "inherit";
-  alignItems?:
-    | "center"
-    | "start"
-    | "end"
-    | "self-start"
-    | "self-end"
-    | "flex-start"
-    | "flex-end";
+  justifyContent?: CSS.Property.JustifyContent;
+  alignItems?: CSS.Property.AlignItems;
 };
 
 const Container = styled.div<BoxProps>`
