@@ -1,3 +1,4 @@
+import firebase from "firebase";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { TaskProps } from "./Item";
@@ -62,18 +63,16 @@ export const useForm = () => {
     [tasks]
   );
 
-  // const handleChangeCompeted = useCallback(
-  //   (id: string) => {
-  //     const newState = tasks.map((task) => {
-  //       return task.id === id ? { ...task, completed: !task.completed } : task;
-  //     });
-  //     return newState;
-  //   },
-  //   [tasks]
-  // );
-
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
+      const id = uuidv4();
+      const data = {
+        id: id,
+        taskName: input,
+        completed: false,
+        deadline: date?.toLocaleDateString() ?? "",
+        createdAt: new Date().toLocaleDateString(),
+      };
       const alreadyUsed = tasks.some((item) => item.taskName === input);
       const emptyInput = input.length === 0;
 
@@ -89,19 +88,11 @@ export const useForm = () => {
         setErrorMessage("Empty field");
         return;
       }
-      setTasks([
-        ...tasks,
-        {
-          id: uuidv4(),
-          taskName: input,
-          completed: false,
-          deadline: date?.toLocaleDateString(),
-          createdAt: new Date().toLocaleDateString(),
-        },
-      ]);
+      setTasks([...tasks, data]);
       setValidate(false);
       setInput("");
       setDate(undefined);
+      firebase.database().ref(`tasks/${id}`).set(data);
     },
     [input, tasks, date]
   );
@@ -112,6 +103,7 @@ export const useForm = () => {
     validate,
     errorMessage,
     tasks,
+    setTasks,
     handleSubmit,
     handleChangeTaskName,
     handleChangeCompleted,

@@ -3,6 +3,9 @@ import Item, { TaskProps } from "./Item";
 
 type ListProps = {
   tasks: TaskProps[];
+  handleChangeCompleted?: (id: string) => void;
+  handleChangeTaskName?: (id: string, newValue: string) => void;
+  handleDeleleTask?: (id: string) => void;
 };
 
 const List = React.memo(({ tasks, ...props }: ListProps) => {

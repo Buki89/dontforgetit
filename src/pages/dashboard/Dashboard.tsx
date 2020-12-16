@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import Input from "../../primitives/components/Input";
 import List from "./List";
@@ -8,6 +8,15 @@ import Box from "../../primitives/components/Box";
 import Overview from "../../core/components/Overview/Overview";
 import { useForm } from "./useForm";
 import Button from "../../primitives/components/Button";
+import firebase from "firebase";
+
+type data = {
+  id: string;
+  taskName: string;
+  deadline: string;
+  createdAt: string;
+  completed: boolean;
+};
 
 const Picker = styled.div`
   cursor: pointer;
@@ -15,7 +24,6 @@ const Picker = styled.div`
   border: 0;
   border-radius: 4px;
   background-color: #216ba5;
-  font: inherit;
   color: #fff;
 `;
 
@@ -32,13 +40,31 @@ const Dashboard: FC = () => {
     handleDate,
     handleOnChange,
     handleSubmit,
+    handleChangeCompleted,
+    handleChangeTaskName,
+    handleDeleleTask,
     input,
     validate,
     tasks,
+    setTasks,
   } = useForm();
   const overall = tasks.length;
   const completed = tasks.filter((task) => task.completed === true).length;
   const incompleted = overall - completed;
+
+  useEffect(() => {
+    const newState = [] as data[];
+    firebase
+      .database()
+      .ref("tasks")
+      .on("value", (snapshop) => {
+        const data = snapshop.val();
+        Object.keys(data).map((item) => {
+          return newState.push(data[item]);
+        });
+        setTasks(newState);
+      });
+  }, [setTasks]);
 
   return (
     <>
@@ -47,7 +73,6 @@ const Dashboard: FC = () => {
         completed={completed}
         incompleted={incompleted}
       />
-
       <form onSubmit={handleSubmit}>
         <Box>
           <Box direction="column">
@@ -69,7 +94,13 @@ const Dashboard: FC = () => {
           <Button type="submit">Add Task!</Button>
         </Box>
       </form>
-      <List tasks={tasks} />
+
+      <List
+        tasks={tasks}
+        handleChangeCompleted={handleChangeCompleted}
+        handleChangeTaskName={handleChangeTaskName}
+        handleDeleleTask={handleDeleleTask}
+      />
     </>
   );
 };
