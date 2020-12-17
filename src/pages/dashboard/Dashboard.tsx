@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import Input from "../../primitives/components/Input";
 import List from "./List";
@@ -9,6 +9,8 @@ import Overview from "../../core/components/Overview/Overview";
 import { useForm } from "./useForm";
 import Button from "../../primitives/components/Button";
 import firebase from "firebase";
+import { useHistory } from "react-router-dom";
+import ReactLoading from "react-loading";
 
 type data = {
   id: string;
@@ -34,6 +36,8 @@ const ErrorMessage = styled.p`
 `;
 
 const Dashboard: FC = () => {
+  const [loading, setLoading] = useState(true);
+
   const {
     date,
     errorMessage,
@@ -52,19 +56,34 @@ const Dashboard: FC = () => {
   const completed = tasks.filter((task) => task.completed === true).length;
   const incompleted = overall - completed;
 
+  const history = useHistory();
+
   useEffect(() => {
+    // if (!firebase.auth().currentUser?.uid) {
+    //   history.push("/");
+    // }
+
+    setLoading(true);
+
     const newState = [] as data[];
     firebase
       .database()
       .ref("tasks")
-      .on("value", (snapshop) => {
+      .once("value")
+      .then((snapshop) => {
         const data = snapshop.val();
         Object.keys(data).map((item) => {
           return newState.push(data[item]);
         });
         setTasks(newState);
-      });
-  }, [setTasks]);
+        setLoading(false);
+      })
+      .catch((e) => console.log(e));
+  }, [history, setTasks]);
+
+  if (loading) {
+    return <ReactLoading type="spin" color="#000" />;
+  }
 
   return (
     <>

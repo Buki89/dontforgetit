@@ -13,10 +13,15 @@ const ButtonBase = styled.button`
 `;
 type ButtonProps = {
   type: "submit" | "reset" | "button";
+  onClick?: () => void;
 };
 
-const Button: FC<ButtonProps> = ({ children, type }) => {
-  return <ButtonBase type={type}>{children}</ButtonBase>;
+const Button: FC<ButtonProps> = ({ children, type, onClick }) => {
+  return (
+    <ButtonBase type={type} onClick={onClick}>
+      {children}
+    </ButtonBase>
+  );
 };
 
 export default Button;

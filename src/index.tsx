@@ -1,9 +1,27 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import firebase from "firebase";
+import { config } from "./firebase/config";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+firebase.initializeApp(config);
+
+ReactDOM.render(
+  <Router>
+    <Switch>
+      <Route exact path="/">
+        <LoginPage />
+      </Route>
+      <Route path="/dashboard">
+        <DashboardPage />
+      </Route>
+    </Switch>
+  </Router>,
+  document.getElementById("root")
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
