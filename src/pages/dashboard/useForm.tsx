@@ -75,6 +75,7 @@ export const useForm = () => {
       };
       const alreadyUsed = tasks.some((item) => item.taskName === input);
       const emptyInput = input.length === 0;
+      const uid = firebase.auth().currentUser?.uid;
 
       e.preventDefault();
 
@@ -92,7 +93,7 @@ export const useForm = () => {
       setValidate(false);
       setInput("");
       setDate(undefined);
-      firebase.database().ref(`tasks/${id}`).set(data);
+      firebase.database().ref(`tasks/${uid}/${id}`).set(data);
     },
     [input, tasks, date]
   );

@@ -6,18 +6,15 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import firebase from "firebase";
 import { config } from "./firebase/config";
+import PrivateRoute from "./Router/PrivateRoute";
 
 firebase.initializeApp(config);
 
 ReactDOM.render(
   <Router>
     <Switch>
-      <Route exact path="/">
-        <LoginPage />
-      </Route>
-      <Route path="/dashboard">
-        <DashboardPage />
-      </Route>
+      <Route exact component={LoginPage} path="/" />
+      <PrivateRoute component={DashboardPage} path="/dashboard" />
     </Switch>
   </Router>,
   document.getElementById("root")

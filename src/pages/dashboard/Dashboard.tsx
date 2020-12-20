@@ -59,16 +59,13 @@ const Dashboard: FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    // if (!firebase.auth().currentUser?.uid) {
-    //   history.push("/");
-    // }
-
     setLoading(true);
 
     const newState = [] as data[];
+    const uid = firebase.auth().currentUser?.uid;
     firebase
       .database()
-      .ref("tasks")
+      .ref(`tasks/${uid}`)
       .once("value")
       .then((snapshop) => {
         const data = snapshop.val();
@@ -78,7 +75,10 @@ const Dashboard: FC = () => {
         setTasks(newState);
         setLoading(false);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log("catch error message" + e);
+        setLoading(false);
+      });
   }, [history, setTasks]);
 
   if (loading) {
