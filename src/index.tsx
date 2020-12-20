@@ -1,22 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import firebase from "firebase";
 import { config } from "./firebase/config";
-import PrivateRoute from "./Router/PrivateRoute";
+import AppRouter from "./Router/AppRouter";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./theme/theme";
 
 firebase.initializeApp(config);
 
 ReactDOM.render(
-  <Router>
-    <Switch>
-      <Route exact component={LoginPage} path="/" />
-      <PrivateRoute component={DashboardPage} path="/dashboard" />
-    </Switch>
-  </Router>,
+  <ThemeProvider theme={theme}>
+    <AppRouter />
+  </ThemeProvider>,
   document.getElementById("root")
 );
 
