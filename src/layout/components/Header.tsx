@@ -1,16 +1,19 @@
 import firebase from "firebase";
 import React, { FC, useCallback } from "react";
-import Button from "../../primitives/components/Button";
+import ButtonBase from "../../primitives/components/Button";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  border-radius: 0.5rem;
+  border-radius: 0.5rem 0.5rem 0 0;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.eclipse};
   display: flex;
   color: ${({ theme }) => theme.colors.white};
   flex-direction: column;
+`;
+const Button = styled(ButtonBase)`
+  border-radius: 0.25rem 0 0 0;
 `;
 
 const Title = styled.p`

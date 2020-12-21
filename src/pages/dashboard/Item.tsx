@@ -9,6 +9,7 @@ const Task = styled.div`
   border-radius: 6px;
   padding: 0 2rem;
   margin: 0.25rem 0;
+  min-width: 60vw;
 `;
 
 export type TaskProps = {
@@ -17,8 +18,7 @@ export type TaskProps = {
   completed: boolean;
   deadline?: string;
   createdAt: string;
-  handleChangeCompleted?: (id: string) => void;
-  handleChangeTaskName?: (id: string, newValue: string) => void;
+  handleChangeTask?: (id: string, checked?: boolean, value?: string) => void;
   handleDeleleTask?: (id: string) => void;
 };
 const Title = styled.p<{ checked: boolean }>`
@@ -34,17 +34,18 @@ const Item: FC<TaskProps> = ({
   completed,
   id,
   deadline,
-  handleChangeCompleted,
-  handleChangeTaskName,
+  handleChangeTask,
   handleDeleleTask,
 }) => {
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState(taskName);
+  const [checked, setChecked] = useState(false);
 
-  const handleChange = useCallback(
-    () => handleChangeCompleted && handleChangeCompleted(id),
-    [handleChangeCompleted, id]
-  );
+  const handleChange = useCallback(() => {
+    handleChangeTask && handleChangeTask(id, !checked, value);
+    setChecked(!checked);
+    setEdit(false);
+  }, [checked, handleChangeTask, id, value]);
 
   const handleDelete = useCallback(
     () => handleDeleleTask && handleDeleleTask(id),
@@ -55,11 +56,6 @@ const Item: FC<TaskProps> = ({
     setEdit(!edit);
   }, [edit]);
 
-  const handleChangeEditedValue = useCallback(() => {
-    handleChangeTaskName && handleChangeTaskName(id, value);
-    setEdit(false);
-  }, [handleChangeTaskName, id, value]);
-
   const handleChangeInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setValue(e.target.value);
@@ -68,23 +64,20 @@ const Item: FC<TaskProps> = ({
   );
 
   console.log(taskName + "taks re render");
+  console.log(value);
 
   return (
     <Task>
       {edit ? (
         <>
           <input value={value} onChange={handleChangeInput} />
-          <button onClick={handleChangeEditedValue}>Save</button>
+          <button onClick={handleChange}>Save</button>
         </>
       ) : (
         <Title checked={completed}>{taskName}</Title>
       )}
       <p>{deadline}</p>
-      <input
-        onChange={handleChange}
-        checked={completed}
-        type="checkbox"
-      ></input>
+      <input onChange={handleChange} checked={checked} type="checkbox"></input>
       <button onClick={handleEditTask}>edit</button>
       <button onClick={handleDelete}>delete</button>
     </Task>

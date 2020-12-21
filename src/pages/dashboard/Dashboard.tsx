@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import Box from "../../primitives/components/Box";
 import Overview from "../../core/components/Overview/Overview";
-import { useForm } from "./useForm";
+import { useForm } from "../../hooks/useForm";
 import Button from "../../primitives/components/Button";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
@@ -44,8 +44,7 @@ const Dashboard: FC = () => {
     handleDate,
     handleOnChange,
     handleSubmit,
-    handleChangeCompleted,
-    handleChangeTaskName,
+    handleChangeTask,
     handleDeleleTask,
     input,
     validate,
@@ -65,7 +64,7 @@ const Dashboard: FC = () => {
     const uid = firebase.auth().currentUser?.uid;
     firebase
       .database()
-      .ref(`tasks/${uid}`)
+      .ref(`${uid}/tasks`)
       .once("value")
       .then((snapshop) => {
         const data = snapshop.val();
@@ -116,8 +115,7 @@ const Dashboard: FC = () => {
 
       <List
         tasks={tasks}
-        handleChangeCompleted={handleChangeCompleted}
-        handleChangeTaskName={handleChangeTaskName}
+        handleChangeTask={handleChangeTask}
         handleDeleleTask={handleDeleleTask}
       />
     </>

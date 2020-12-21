@@ -8,20 +8,31 @@ const ButtonBase = styled.button<Pick<ButtonProps, "alignSelf">>`
   border: 0;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.colors.sand};
-  font: inherit;
   color: ${({ theme }) => theme.colors.white};
   outline: none;
-  align-items: ${({ alignSelf }) => alignSelf};
+  align-self: ${({ alignSelf }) => alignSelf};
 `;
 type ButtonProps = {
   type: "submit" | "reset" | "button";
   onClick?: () => void;
   alignSelf?: CSS.Property.AlignSelf;
+  className?: string;
 };
 
-const Button: FC<ButtonProps> = ({ children, type, onClick, alignSelf }) => {
+const Button: FC<ButtonProps> = ({
+  children,
+  type,
+  onClick,
+  alignSelf,
+  className,
+}) => {
   return (
-    <ButtonBase alignSelf={alignSelf} type={type} onClick={onClick}>
+    <ButtonBase
+      alignSelf={alignSelf}
+      type={type}
+      onClick={onClick}
+      className={className}
+    >
       {children}
     </ButtonBase>
   );

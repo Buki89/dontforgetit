@@ -1,7 +1,7 @@
 import firebase from "firebase";
 import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { TaskProps } from "./Item";
+import { TaskProps } from "../pages/dashboard/Item";
 
 export const useForm = () => {
   const [tasks, setTasks] = useState<TaskProps[]>([]);
@@ -9,6 +9,7 @@ export const useForm = () => {
   const [date, setDate] = useState<Date | null | undefined>(undefined);
   const [validate, setValidate] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const uid = firebase.auth().currentUser?.uid;
 
   const handleOnChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,43 +25,36 @@ export const useForm = () => {
         return task.id !== id;
       });
       setTasks(newArr);
+      firebase.database().ref(`${uid}/tasks/${id}`).remove();
     },
-    [tasks]
+    [tasks, uid]
   );
 
   const handleDate = useCallback((event) => setDate(event), []);
 
-  const handleChangeCompleted = useCallback(
-    (id: string) => {
+  const handleChangeTask = useCallback(
+    (id: string, checked?: boolean, value?: string) => {
+      console.log("handleChangeCompleted" + id, checked, value);
       const newArr = tasks.map((task) => {
         if (task.id === id) {
           return {
             ...task,
-            completed: !task.completed,
+            taskName: value ? value : task.taskName,
+            completed: checked ? checked : task.completed,
           };
         }
         return task;
       });
-
       setTasks(newArr);
+      firebase
+        .database()
+        .ref(`${uid}/tasks/${id}`)
+        .update({
+          taskName: value && value,
+          completed: checked && checked,
+        });
     },
-    [tasks]
-  );
-  const handleChangeTaskName = useCallback(
-    (id: string, newValue: string) => {
-      const newState = tasks.map((task) => {
-        if (task.id === id) {
-          return {
-            ...task,
-            taskName: newValue,
-          };
-        }
-        return task;
-      });
-
-      setTasks(newState);
-    },
-    [tasks]
+    [tasks, uid]
   );
 
   const handleSubmit = useCallback(
@@ -75,7 +69,6 @@ export const useForm = () => {
       };
       const alreadyUsed = tasks.some((item) => item.taskName === input);
       const emptyInput = input.length === 0;
-      const uid = firebase.auth().currentUser?.uid;
 
       e.preventDefault();
 
@@ -93,10 +86,12 @@ export const useForm = () => {
       setValidate(false);
       setInput("");
       setDate(undefined);
-      firebase.database().ref(`tasks/${uid}/${id}`).set(data);
+      firebase.database().ref(`${uid}/tasks/${id}`).set(data);
     },
-    [input, tasks, date]
+    [input, date, tasks, uid]
   );
+
+  console.log(tasks);
 
   return {
     input,
@@ -106,8 +101,7 @@ export const useForm = () => {
     tasks,
     setTasks,
     handleSubmit,
-    handleChangeTaskName,
-    handleChangeCompleted,
+    handleChangeTask,
     handleDate,
     handleDeleleTask,
     handleOnChange,
