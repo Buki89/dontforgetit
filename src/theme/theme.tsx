@@ -1,3 +1,5 @@
+import { DefaultTheme } from "styled-components";
+
 type Colors = {
   green: string;
   white: string;
@@ -6,18 +8,18 @@ type Colors = {
   eclipse: string;
 };
 
-const colors = {
-  green: "#028d09",
-  white: "#fff",
-  black: "#000",
-  sand: "#d69c2f",
-  eclipse: "#343148",
-};
+declare module "styled-components" {
+  export interface DefaultTheme {
+    colors: Colors;
+  }
+}
 
-export type Theme = {
-  colors: Colors;
-};
-
-export const theme: Theme = {
-  colors,
+export const Theme: DefaultTheme = {
+  colors: {
+    green: "#028d09",
+    white: "#fff",
+    black: "#000",
+    sand: "#d69c2f",
+    eclipse: "#343148",
+  },
 };

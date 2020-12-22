@@ -10,6 +10,7 @@ export const useForm = () => {
   const [validate, setValidate] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const uid = firebase.auth().currentUser?.uid;
+  const db = firebase.database();
 
   const handleOnChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,34 +26,31 @@ export const useForm = () => {
         return task.id !== id;
       });
       setTasks(newArr);
-      firebase.database().ref(`${uid}/tasks/${id}`).remove();
+      db.ref(`${uid}/tasks/${id}`).remove();
     },
-    [tasks, uid]
+    [db, tasks, uid]
   );
 
   const handleDate = useCallback((event) => setDate(event), []);
 
   const handleChangeTask = useCallback(
-    (id: string, checked?: boolean, value?: string) => {
+    (id: string, checked: boolean, value: string) => {
       console.log("handleChangeCompleted" + id, checked, value);
       const newArr = tasks.map((task) => {
         if (task.id === id) {
           return {
             ...task,
-            taskName: value ? value : task.taskName,
-            completed: checked ? checked : task.completed,
+            taskName: value,
+            completed: checked,
           };
         }
         return task;
       });
       setTasks(newArr);
-      firebase
-        .database()
-        .ref(`${uid}/tasks/${id}`)
-        .update({
-          taskName: value && value,
-          completed: checked && checked,
-        });
+      firebase.database().ref(`${uid}/tasks/${id}`).update({
+        taskName: value,
+        completed: checked,
+      });
     },
     [tasks, uid]
   );
@@ -86,9 +84,9 @@ export const useForm = () => {
       setValidate(false);
       setInput("");
       setDate(undefined);
-      firebase.database().ref(`${uid}/tasks/${id}`).set(data);
+      db.ref(`${uid}/tasks/${id}`).set(data);
     },
-    [input, date, tasks, uid]
+    [input, date, tasks, db, uid]
   );
 
   console.log(tasks);

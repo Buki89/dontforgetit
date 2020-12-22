@@ -4,7 +4,7 @@ import Item, { TaskProps } from "./Item";
 
 type ListProps = {
   tasks: TaskProps[];
-  handleChangeTask?: (id: string, checked?: boolean, value?: string) => void;
+  handleChangeTask?: (id: string, checked: boolean, value: string) => void;
   handleDeleleTask?: (id: string) => void;
 };
 

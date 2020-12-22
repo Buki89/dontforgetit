@@ -12,15 +12,6 @@ const Task = styled.div`
   min-width: 60vw;
 `;
 
-export type TaskProps = {
-  id: string;
-  taskName: string;
-  completed: boolean;
-  deadline?: string;
-  createdAt: string;
-  handleChangeTask?: (id: string, checked?: boolean, value?: string) => void;
-  handleDeleleTask?: (id: string) => void;
-};
 const Title = styled.p<{ checked: boolean }>`
   font-size: 1.25rem;
   line-height: 1;
@@ -28,6 +19,16 @@ const Title = styled.p<{ checked: boolean }>`
   color: ${({ checked }) => (checked ? "#028d09" : "#000")};
   margin-right: 2rem;
 `;
+
+export type TaskProps = {
+  id: string;
+  taskName: string;
+  completed: boolean;
+  deadline?: string;
+  createdAt: string;
+  handleChangeTask?: (id: string, checked: boolean, value: string) => void;
+  handleDeleleTask?: (id: string) => void;
+};
 
 const Item: FC<TaskProps> = ({
   taskName,
@@ -39,7 +40,7 @@ const Item: FC<TaskProps> = ({
 }) => {
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState(taskName);
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(completed);
 
   const handleChange = useCallback(() => {
     handleChangeTask && handleChangeTask(id, !checked, value);
@@ -64,7 +65,7 @@ const Item: FC<TaskProps> = ({
   );
 
   console.log(taskName + "taks re render");
-  console.log(value);
+  console.log(checked);
 
   return (
     <Task>
@@ -74,7 +75,7 @@ const Item: FC<TaskProps> = ({
           <button onClick={handleChange}>Save</button>
         </>
       ) : (
-        <Title checked={completed}>{taskName}</Title>
+        <Title checked={checked}>{taskName}</Title>
       )}
       <p>{deadline}</p>
       <input onChange={handleChange} checked={checked} type="checkbox"></input>

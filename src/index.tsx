@@ -5,12 +5,14 @@ import firebase from "firebase";
 import { config } from "./firebase/config";
 import AppRouter from "./Router/AppRouter";
 import { ThemeProvider } from "styled-components";
-import { theme } from "./theme/theme";
+import { Theme } from "./theme/theme";
+import GlobalStyle from "./theme/globalStyles";
 
 firebase.initializeApp(config);
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={Theme}>
+    <GlobalStyle />
     <AppRouter />
   </ThemeProvider>,
   document.getElementById("root")

@@ -34,6 +34,11 @@ const ErrorMessage = styled.p`
   line-height: 1;
   color: #ca2525;
 `;
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const Dashboard: FC = () => {
   const [loading, setLoading] = useState(true);
@@ -91,33 +96,35 @@ const Dashboard: FC = () => {
         completed={completed}
         incompleted={incompleted}
       />
-      <form onSubmit={handleSubmit}>
-        <Box>
-          <Box direction="column">
-            <Input onChange={handleOnChange} value={input} />
-            {validate && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      <Content>
+        <form onSubmit={handleSubmit}>
+          <Box>
+            <Box direction="column">
+              <Input onChange={handleOnChange} value={input} />
+              {validate && <ErrorMessage>{errorMessage}</ErrorMessage>}
+            </Box>
+
+            <DatePicker
+              dateFormat="dd/MM/yyyy"
+              selected={date}
+              onChange={handleDate}
+              minDate={new Date()}
+              customInput={
+                <Picker>
+                  {date ? date.toLocaleDateString() : "pick deadline"}
+                </Picker>
+              }
+            />
+            <Button type="submit">Add Task!</Button>
           </Box>
+        </form>
 
-          <DatePicker
-            dateFormat="dd/MM/yyyy"
-            selected={date}
-            onChange={handleDate}
-            minDate={new Date()}
-            customInput={
-              <Picker>
-                {date ? date.toLocaleDateString() : "pick deadline"}
-              </Picker>
-            }
-          />
-          <Button type="submit">Add Task!</Button>
-        </Box>
-      </form>
-
-      <List
-        tasks={tasks}
-        handleChangeTask={handleChangeTask}
-        handleDeleleTask={handleDeleleTask}
-      />
+        <List
+          tasks={tasks}
+          handleChangeTask={handleChangeTask}
+          handleDeleleTask={handleDeleleTask}
+        />
+      </Content>
     </>
   );
 };
