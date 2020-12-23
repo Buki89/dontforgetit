@@ -1,5 +1,6 @@
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import styled from "styled-components";
+import { AppStore } from "../../../store/store";
 
 const Wrapper = styled.div`
   color: ${({ theme }) => theme.colors.white};
@@ -8,7 +9,6 @@ const Wrapper = styled.div`
   width: 100%;
   justify-content: flex-end;
   padding: 0.125rem 0;
-  margin-bottom: 2rem;
 `;
 const Container = styled.div`
   display: flex;
@@ -30,6 +30,9 @@ type OverViewProps = {
 };
 
 const Overview: FC<OverViewProps> = ({ completed, overall, incompleted }) => {
+  const { state } = useContext(AppStore);
+
+  console.log(state);
   return (
     <Wrapper>
       <Container>

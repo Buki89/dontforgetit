@@ -1,16 +1,16 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import Input from "../../primitives/components/Input";
 import List from "./List";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import Box from "../../primitives/components/Box";
-import Overview from "../../core/components/Overview/Overview";
 import { useForm } from "../../hooks/useForm";
 import Button from "../../primitives/components/Button";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
 import ReactLoading from "react-loading";
+import { AppStore } from "../../store/store";
 
 type data = {
   id: string;
@@ -42,6 +42,7 @@ const Content = styled.div`
 
 const Dashboard: FC = () => {
   const [loading, setLoading] = useState(true);
+  const { dispatch } = useContext(AppStore);
 
   const {
     date,
@@ -56,9 +57,6 @@ const Dashboard: FC = () => {
     tasks,
     setTasks,
   } = useForm();
-  const overall = tasks.length;
-  const completed = tasks.filter((task) => task.completed === true).length;
-  const incompleted = overall - completed;
 
   const history = useHistory();
 
@@ -77,13 +75,14 @@ const Dashboard: FC = () => {
           return newState.push(data[item]);
         });
         setTasks(newState);
+        dispatch({ type: "SET_TASKS", payload: newState });
         setLoading(false);
       })
       .catch((e) => {
         console.log("catch error message" + e);
         setLoading(false);
       });
-  }, [history, setTasks]);
+  }, [dispatch, history, setTasks]);
 
   if (loading) {
     return <ReactLoading type="spin" color="#000" />;
@@ -91,11 +90,6 @@ const Dashboard: FC = () => {
 
   return (
     <>
-      <Overview
-        overall={overall}
-        completed={completed}
-        incompleted={incompleted}
-      />
       <Content>
         <form onSubmit={handleSubmit}>
           <Box>

@@ -5,7 +5,7 @@ import { TiShoppingCart } from "react-icons/ti";
 import Box from "../../primitives/components/Box";
 
 const Container = styled.div`
-  min-height: 4rem;
+  min-height: 7vh;
   background-color: ${({ theme }) => theme.colors.eclipse};
   width: 100%;
   display: flex;
@@ -17,10 +17,10 @@ const Container = styled.div`
   bottom: 0;
 `;
 const Text = styled.p`
-  font-size: 1.25rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.2;
   font-weight: bold;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.white};
   margin: 0;
 `;
 
@@ -30,11 +30,11 @@ const Footer: FC<FooterProps> = () => {
   return (
     <Container>
       <Box direction="column" margin="0 1rem" alignItems="center">
-        <FaTasks size="1.5rem" color="#fff" />
+        <FaTasks size="1rem" color="#fff" />
         <Text>Tasks list</Text>
       </Box>
       <Box direction="column" margin="0 1rem" alignItems="center">
-        <TiShoppingCart size="1.8rem" color="#fff" />
+        <TiShoppingCart size="1.2rem" color="fff" />
         <Text>Shopping list</Text>
       </Box>
     </Container>

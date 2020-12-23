@@ -1,10 +1,13 @@
-import React, { FC, useCallback, useEffect } from "react";
+import React, { FC, useCallback, useContext, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { useHistory } from "react-router-dom";
 import Button from "../../primitives/components/Button";
+import { AppStore } from "../../store/store";
 
 const LoginPage: FC = () => {
+  const { dispatch } = useContext(AppStore);
+
   const history = useHistory();
 
   useEffect(
@@ -23,9 +26,11 @@ const LoginPage: FC = () => {
       .auth()
       .signInWithPopup(googleAuthProvider)
       .then(() => {
+        const uid = firebase.auth().currentUser?.uid;
+        dispatch({ type: "SET_UID", payload: uid });
         history.push("/dashboard");
       });
-  }, [history]);
+  }, [dispatch, history]);
 
   return (
     <Button onClick={handleClick} type="button">
