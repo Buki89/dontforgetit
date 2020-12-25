@@ -1,11 +1,10 @@
 import React from "react";
 import Box from "../../primitives/components/Box";
-import Item, { TaskProps } from "./Item";
+import { Task } from "../../store/Reducer";
+import Item from "./Item";
 
 type ListProps = {
-  tasks: TaskProps[];
-  handleChangeTask?: (id: string, checked: boolean, value: string) => void;
-  handleDeleleTask?: (id: string) => void;
+  tasks: Task[];
 };
 
 const List = React.memo(({ tasks, ...props }: ListProps) => {

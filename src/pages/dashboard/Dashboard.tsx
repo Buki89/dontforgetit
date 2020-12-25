@@ -11,6 +11,7 @@ import firebase from "firebase";
 import { useHistory } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { AppStore } from "../../store/store";
+import { Type } from "../../store/Reducer";
 
 type data = {
   id: string;
@@ -39,10 +40,17 @@ const Content = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Dashboard: FC = () => {
   const [loading, setLoading] = useState(true);
-  const { dispatch } = useContext(AppStore);
+  const { state, dispatch } = useContext(AppStore);
 
   const {
     date,
@@ -50,12 +58,8 @@ const Dashboard: FC = () => {
     handleDate,
     handleOnChange,
     handleSubmit,
-    handleChangeTask,
-    handleDeleleTask,
     input,
     validate,
-    tasks,
-    setTasks,
   } = useForm();
 
   const history = useHistory();
@@ -74,19 +78,24 @@ const Dashboard: FC = () => {
         Object.keys(data).map((item) => {
           return newState.push(data[item]);
         });
-        setTasks(newState);
-        dispatch({ type: "SET_TASKS", payload: newState });
+        dispatch({ type: Type.setTasks, payload: newState });
         setLoading(false);
       })
       .catch((e) => {
         console.log("catch error message" + e);
         setLoading(false);
       });
-  }, [dispatch, history, setTasks]);
+  }, [dispatch, history]);
 
   if (loading) {
-    return <ReactLoading type="spin" color="#000" />;
+    return (
+      <LoadingContainer>
+        <ReactLoading type="spin" color="#000" />
+      </LoadingContainer>
+    );
   }
+
+  console.log(state);
 
   return (
     <>
@@ -113,11 +122,7 @@ const Dashboard: FC = () => {
           </Box>
         </form>
 
-        <List
-          tasks={tasks}
-          handleChangeTask={handleChangeTask}
-          handleDeleleTask={handleDeleleTask}
-        />
+        <List tasks={state.tasks} />
       </Content>
     </>
   );

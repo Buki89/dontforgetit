@@ -4,6 +4,7 @@ import "firebase/auth";
 import { useHistory } from "react-router-dom";
 import Button from "../../primitives/components/Button";
 import { AppStore } from "../../store/store";
+import { Type } from "../../store/Reducer";
 
 const LoginPage: FC = () => {
   const { dispatch } = useContext(AppStore);
@@ -15,9 +16,10 @@ const LoginPage: FC = () => {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           history.push("/dashboard");
+          dispatch({ type: Type.setUid, payload: user.uid });
         }
       }),
-    [history]
+    [dispatch, history]
   );
 
   const handleClick = useCallback(() => {
@@ -26,8 +28,8 @@ const LoginPage: FC = () => {
       .auth()
       .signInWithPopup(googleAuthProvider)
       .then(() => {
-        const uid = firebase.auth().currentUser?.uid;
-        dispatch({ type: "SET_UID", payload: uid });
+        const uid = firebase.auth().currentUser?.uid ?? "";
+        dispatch({ type: Type.setUid, payload: uid });
         history.push("/dashboard");
       });
   }, [dispatch, history]);

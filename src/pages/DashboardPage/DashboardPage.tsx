@@ -10,7 +10,7 @@ const DashboardPage: FC = () => {
   return (
     <Box direction="column" alignItems="center" justifyContent="center">
       <Header />
-      <Overview completed={0} incompleted={0} overall={0} />
+      <Overview />
       <Content>
         <Dashboard />
       </Content>

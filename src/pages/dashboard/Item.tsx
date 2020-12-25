@@ -1,7 +1,10 @@
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useContext, useState } from "react";
 import styled from "styled-components";
+import { Task, Type } from "../../store/Reducer";
+import { AppStore } from "../../store/store";
+import { firebase } from "../../firebase/config";
 
-const Task = styled.div`
+const Container = styled.div`
   display: flex;
   align-items: center;
   min-height: 4rem;
@@ -20,40 +23,35 @@ const Title = styled.p<{ checked: boolean }>`
   margin-right: 2rem;
 `;
 
-export type TaskProps = {
-  id: string;
-  taskName: string;
-  completed: boolean;
-  deadline?: string;
-  createdAt: string;
-  handleChangeTask?: (id: string, checked: boolean, value: string) => void;
-  handleDeleleTask?: (id: string) => void;
-};
-
-const Item: FC<TaskProps> = ({
-  taskName,
-  completed,
-  id,
-  deadline,
-  handleChangeTask,
-  handleDeleleTask,
-}) => {
+const Item: FC<Task> = ({ taskName, completed, id, deadline }) => {
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState(taskName);
   const [checked, setChecked] = useState(completed);
+  const { state, dispatch } = useContext(AppStore);
 
   const handleChange = useCallback(() => {
-    handleChangeTask && handleChangeTask(id, !checked, value);
+    dispatch({
+      type: Type.editTask,
+      payload: { id, completed: !checked, taskName: value },
+    });
+    firebase
+      .database()
+      .ref(`${state.uid}/tasks/${id}`)
+      .update({
+        taskName: value,
+        completed: !checked,
+      })
+      .catch((e) => alert(e));
     setChecked(!checked);
     setEdit(false);
-  }, [checked, handleChangeTask, id, value]);
+  }, [checked, dispatch, id, state.uid, value]);
 
-  const handleDelete = useCallback(
-    () => handleDeleleTask && handleDeleleTask(id),
-    [handleDeleleTask, id]
-  );
+  const handleDelete = useCallback(() => {
+    firebase.database().ref(`${state.uid}/tasks/${id}`).remove();
+    dispatch({ type: Type.deleteTask, payload: id });
+  }, [dispatch, id, state.uid]);
 
-  const handleEditTask = useCallback(() => {
+  const handleEditMenu = useCallback(() => {
     setEdit(!edit);
   }, [edit]);
 
@@ -64,11 +62,8 @@ const Item: FC<TaskProps> = ({
     []
   );
 
-  console.log(taskName + "taks re render");
-  console.log(checked);
-
   return (
-    <Task>
+    <Container>
       {edit ? (
         <>
           <input value={value} onChange={handleChangeInput} />
@@ -79,9 +74,9 @@ const Item: FC<TaskProps> = ({
       )}
       <p>{deadline}</p>
       <input onChange={handleChange} checked={checked} type="checkbox"></input>
-      <button onClick={handleEditTask}>edit</button>
+      <button onClick={handleEditMenu}>edit</button>
       <button onClick={handleDelete}>delete</button>
-    </Task>
+    </Container>
   );
 };
 

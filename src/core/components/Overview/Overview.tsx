@@ -1,4 +1,4 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useMemo } from "react";
 import styled from "styled-components";
 import { AppStore } from "../../../store/store";
 
@@ -23,16 +23,18 @@ const Text = styled.p`
   font-weight: bold;
 `;
 
-type OverViewProps = {
-  completed: number;
-  incompleted: number;
-  overall: number;
-};
-
-const Overview: FC<OverViewProps> = ({ completed, overall, incompleted }) => {
+const Overview: FC = () => {
   const { state } = useContext(AppStore);
+  const overall = state.tasks.length;
+  const completed = useMemo(
+    () =>
+      state.tasks.filter((task) => {
+        return task.completed === true;
+      }).length,
+    [state.tasks]
+  );
+  const incompleted = overall - completed;
 
-  console.log(state);
   return (
     <Wrapper>
       <Container>

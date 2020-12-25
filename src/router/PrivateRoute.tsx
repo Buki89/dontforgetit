@@ -1,6 +1,6 @@
-import firebase from "firebase";
-import React, { FC } from "react";
+import React, { FC, useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
+import { AppStore } from "../store/store";
 
 type PrivateRouteProps = {
   component: React.ElementType;
@@ -11,7 +11,8 @@ const PrivateRoute: FC<PrivateRouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const authed = firebase.auth().currentUser?.uid ? true : false;
+  const { state } = useContext(AppStore);
+  const authed = state.uid.length > 0;
   return (
     <Route
       {...rest}

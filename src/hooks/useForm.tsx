@@ -1,16 +1,17 @@
 import firebase from "firebase";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { TaskProps } from "../pages/dashboard/Item";
+import { Type } from "../store/Reducer";
+import { AppStore } from "../store/store";
 
 export const useForm = () => {
-  const [tasks, setTasks] = useState<TaskProps[]>([]);
   const [input, setInput] = useState("");
   const [date, setDate] = useState<Date | null | undefined>(undefined);
   const [validate, setValidate] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const uid = firebase.auth().currentUser?.uid;
   const db = firebase.database();
+  const { state, dispatch } = useContext(AppStore);
 
   const handleOnChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,40 +21,7 @@ export const useForm = () => {
     []
   );
 
-  const handleDeleleTask = useCallback(
-    (id: string) => {
-      const newArr = tasks.filter((task: TaskProps) => {
-        return task.id !== id;
-      });
-      setTasks(newArr);
-      db.ref(`${uid}/tasks/${id}`).remove();
-    },
-    [db, tasks, uid]
-  );
-
   const handleDate = useCallback((event) => setDate(event), []);
-
-  const handleChangeTask = useCallback(
-    (id: string, checked: boolean, value: string) => {
-      console.log("handleChangeCompleted" + id, checked, value);
-      const newArr = tasks.map((task) => {
-        if (task.id === id) {
-          return {
-            ...task,
-            taskName: value,
-            completed: checked,
-          };
-        }
-        return task;
-      });
-      setTasks(newArr);
-      firebase.database().ref(`${uid}/tasks/${id}`).update({
-        taskName: value,
-        completed: checked,
-      });
-    },
-    [tasks, uid]
-  );
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -65,7 +33,7 @@ export const useForm = () => {
         deadline: date?.toLocaleDateString() ?? "",
         createdAt: new Date().toLocaleDateString(),
       };
-      const alreadyUsed = tasks.some((item) => item.taskName === input);
+      const alreadyUsed = state.tasks.some((item) => item.taskName === input);
       const emptyInput = input.length === 0;
 
       e.preventDefault();
@@ -80,28 +48,22 @@ export const useForm = () => {
         setErrorMessage("Empty field");
         return;
       }
-      setTasks([...tasks, data]);
+      dispatch({ type: Type.setTask, payload: data });
       setValidate(false);
       setInput("");
       setDate(undefined);
       db.ref(`${uid}/tasks/${id}`).set(data);
     },
-    [input, date, tasks, db, uid]
+    [input, date, state.tasks, dispatch, db, uid]
   );
-
-  console.log(tasks);
 
   return {
     input,
     date,
     validate,
     errorMessage,
-    tasks,
-    setTasks,
     handleSubmit,
-    handleChangeTask,
     handleDate,
-    handleDeleleTask,
     handleOnChange,
   };
 };
