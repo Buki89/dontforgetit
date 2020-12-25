@@ -1,15 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
-import firebase from "firebase";
-import { config } from "./firebase/config";
 import AppRouter from "./router/AppRouter";
 import { ThemeProvider } from "styled-components";
 import { Theme } from "./theme/theme";
 import GlobalStyle from "./theme/globalStyles";
 import Store from "./store/store";
-
-firebase.initializeApp(config);
 
 ReactDOM.render(
   <Store>
