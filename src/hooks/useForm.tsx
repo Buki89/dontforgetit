@@ -21,17 +21,17 @@ export const useForm = () => {
     []
   );
 
-  const handleDate = useCallback((event) => setDate(event), []);
+  const handleDate = useCallback((event: Date) => setDate(event), []);
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       const id = uuidv4();
-      const data = {
-        id: id,
+      const Task = {
+        id,
         taskName: input,
         completed: false,
-        deadline: date?.toLocaleDateString() ?? "",
-        createdAt: new Date().toLocaleDateString(),
+        deadline: date?.getTime() ?? 0,
+        createdAt: new Date().getTime(),
       };
       const alreadyUsed = state.tasks.some((item) => item.taskName === input);
       const emptyInput = input.length === 0;
@@ -48,14 +48,16 @@ export const useForm = () => {
         setErrorMessage("Empty field");
         return;
       }
-      dispatch({ type: Type.setTask, payload: data });
+      dispatch({ type: Type.setTask, payload: { task: Task } });
       setValidate(false);
       setInput("");
       setDate(undefined);
-      db.ref(`${uid}/tasks/${id}`).set(data);
+      db.ref(`${uid}/tasks/${id}`).set(Task);
     },
     [input, date, state.tasks, dispatch, db, uid]
   );
+
+  console.log(date?.getTime());
 
   return {
     input,

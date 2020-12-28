@@ -1,5 +1,13 @@
 import React, { FC } from "react";
-//import styled from 'styled-components'
+import styled from "styled-components";
+
+const StyledInput = styled.input`
+  min-width: 500px;
+  min-height: 50px;
+  border-radius: 10px;
+  font-size: 2rem;
+  outline: none;
+`;
 
 type InputProps = {
   placeholder?: string;
@@ -9,7 +17,7 @@ type InputProps = {
 
 const Input: FC<InputProps> = ({ placeholder, onChange, value }) => {
   return (
-    <input
+    <StyledInput
       type="text"
       value={value}
       onChange={onChange}

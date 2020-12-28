@@ -3,16 +3,20 @@ import styled from "styled-components";
 import { Task, Type } from "../../store/Reducer";
 import { AppStore } from "../../store/store";
 import { firebase } from "../../firebase/config";
+import Box from "../../primitives/components/Box";
+import { formatDeadline } from "../../helper/formatDeadline";
+import { Checkbox, Button } from "../../primitives";
 
 const Container = styled.div`
   display: flex;
   align-items: center;
   min-height: 4rem;
-  border: 1px solid grey;
   border-radius: 6px;
-  padding: 0 2rem;
+  padding: 0.25rem 2rem;
   margin: 0.25rem 0;
   min-width: 60vw;
+  justify-content: space-between;
+  //border: 1px inset;
 `;
 
 const Title = styled.p<{ checked: boolean }>`
@@ -23,7 +27,14 @@ const Title = styled.p<{ checked: boolean }>`
   margin-right: 2rem;
 `;
 
-const Item: FC<Task> = ({ taskName, completed, id, deadline }) => {
+const Deadline = styled.p`
+  font-size: 1rem;
+  line-height: 1.2;
+  color: ${({ theme }) => theme.colors.black};
+  margin-right: 1rem;
+`;
+
+const Item: FC<Task> = ({ taskName, completed, id, deadline, createdAt }) => {
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState(taskName);
   const [checked, setChecked] = useState(completed);
@@ -62,20 +73,38 @@ const Item: FC<Task> = ({ taskName, completed, id, deadline }) => {
     []
   );
 
+  const time = new Date().getTime();
+
   return (
     <Container>
-      {edit ? (
-        <>
-          <input value={value} onChange={handleChangeInput} />
-          <button onClick={handleChange}>Save</button>
-        </>
-      ) : (
-        <Title checked={checked}>{taskName}</Title>
-      )}
-      <p>{deadline}</p>
-      <input onChange={handleChange} checked={checked} type="checkbox"></input>
-      <button onClick={handleEditMenu}>edit</button>
-      <button onClick={handleDelete}>delete</button>
+      <Box alignItems="center">
+        <Checkbox onChange={handleChange} checked={checked}></Checkbox>
+
+        {edit ? (
+          <>
+            <input value={value} onChange={handleChangeInput} />
+            <button onClick={handleChange}>Save</button>
+          </>
+        ) : (
+          <Title checked={checked}>{taskName}</Title>
+        )}
+      </Box>
+      <Box alignItems="center">
+        <Deadline>{formatDeadline(time, deadline)}</Deadline>
+        <Box direction="column">
+          <Button
+            margin="0 0 0.125rem"
+            type="button"
+            color="green"
+            onClick={handleEditMenu}
+          >
+            edit
+          </Button>
+          <Button type="button" color="red" onClick={handleDelete}>
+            delete
+          </Button>
+        </Box>
+      </Box>
     </Container>
   );
 };

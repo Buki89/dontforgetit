@@ -2,7 +2,7 @@ import React, { FC, useCallback, useContext, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
 import { useHistory } from "react-router-dom";
-import Button from "../../primitives/components/Button";
+import { Button } from "../../primitives";
 import { AppStore } from "../../store/store";
 import { Type } from "../../store/Reducer";
 

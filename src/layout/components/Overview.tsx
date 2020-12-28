@@ -1,6 +1,6 @@
 import React, { FC, useContext, useMemo } from "react";
 import styled from "styled-components";
-import { AppStore } from "../../../store/store";
+import { AppStore } from "../../store/store";
 
 const Wrapper = styled.div`
   color: ${({ theme }) => theme.colors.white};
@@ -21,6 +21,7 @@ const Text = styled.p`
   margin: 0;
   padding: 0;
   font-weight: bold;
+  user-select: none;
 `;
 
 const Overview: FC = () => {

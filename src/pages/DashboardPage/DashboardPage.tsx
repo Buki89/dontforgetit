@@ -1,7 +1,6 @@
 import React, { FC } from "react";
-import Overview from "../../core/components/Overview/Overview";
+import Overview from "../../layout/components/Overview";
 import Content from "../../layout/components/Content";
-import Footer from "../../layout/components/Footer";
 import Header from "../../layout/components/Header";
 import Box from "../../primitives/components/Box";
 import Dashboard from "../dashboard/Dashboard";
@@ -14,7 +13,7 @@ const DashboardPage: FC = () => {
       <Content>
         <Dashboard />
       </Content>
-      <Footer />
+      {/* <Footer /> */}
     </Box>
   );
 };

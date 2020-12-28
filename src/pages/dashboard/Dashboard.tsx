@@ -6,29 +6,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import Box from "../../primitives/components/Box";
 import { useForm } from "../../hooks/useForm";
-import Button from "../../primitives/components/Button";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
 import ReactLoading from "react-loading";
 import { AppStore } from "../../store/store";
-import { Type } from "../../store/Reducer";
-
-type data = {
-  id: string;
-  taskName: string;
-  deadline: string;
-  createdAt: string;
-  completed: boolean;
-};
-
-const Picker = styled.div`
-  cursor: pointer;
-  padding: 5px 15px;
-  border: 0;
-  border-radius: 4px;
-  background-color: #216ba5;
-  color: #fff;
-`;
+import { Task, Type } from "../../store/Reducer";
+import { BsCalendar } from "react-icons/bs";
+import { IoAddCircle } from "react-icons/io5";
 
 const ErrorMessage = styled.p`
   font-size: 0.85rem;
@@ -67,7 +51,7 @@ const Dashboard: FC = () => {
   useEffect(() => {
     setLoading(true);
 
-    const newState = [] as data[];
+    const newState = [] as Task[];
     const uid = firebase.auth().currentUser?.uid;
     firebase
       .database()
@@ -103,7 +87,8 @@ const Dashboard: FC = () => {
         <form onSubmit={handleSubmit}>
           <Box>
             <Box direction="column">
-              <Input onChange={handleOnChange} value={input} />
+              <Input onChange={handleOnChange} value={input}></Input>
+
               {validate && <ErrorMessage>{errorMessage}</ErrorMessage>}
             </Box>
 
@@ -113,12 +98,17 @@ const Dashboard: FC = () => {
               onChange={handleDate}
               minDate={new Date()}
               customInput={
-                <Picker>
+                <BsCalendar size="40px">
                   {date ? date.toLocaleDateString() : "pick deadline"}
-                </Picker>
+                </BsCalendar>
               }
             />
-            <Button type="submit">Add Task!</Button>
+            {/* <Button color="blue" type="submit">
+              Add Task!
+            </Button> */}
+            <button type="submit">
+              <IoAddCircle size="40px" color="#00F" type="submit" />
+            </button>
           </Box>
         </form>
 

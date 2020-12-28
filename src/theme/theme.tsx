@@ -6,6 +6,11 @@ type Colors = {
   black: string;
   sand: string;
   eclipse: string;
+  red: string;
+  blue: string;
+  lighterBlue: string;
+  yellow: string;
+  kaktus: string;
 };
 
 declare module "styled-components" {
@@ -21,5 +26,10 @@ export const Theme: DefaultTheme = {
     black: "#000",
     sand: "#d69c2f",
     eclipse: "#343148",
+    red: "#DD4132",
+    blue: "#034F84",
+    lighterBlue: "#216ba5",
+    yellow: "#FAE03C",
+    kaktus: "#79C753",
   },
 };

@@ -1,9 +1,8 @@
-
 export type Task = {
     id: string,
     taskName:string,
-    deadline: string;
-    createdAt: string;
+    deadline: number;
+    createdAt: number;
     completed: boolean;
 } 
 
@@ -38,7 +37,9 @@ export type Actions = {
     }
 } | {
     type: Type.setTask,
-    payload: Task
+    payload:{
+        task: Task
+    } 
 }
 
 const Reducer = (state: State, action: Actions): State => {
@@ -74,11 +75,13 @@ const Reducer = (state: State, action: Actions): State => {
                     return task
                 })
             }           
-            
-        
+        case Type.setTask: 
+            return {
+                ...state,
+                tasks: [...state.tasks,action.payload.task]}
         default:
             return state;
-    }
+    }   
 };
 
 export default Reducer;

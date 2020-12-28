@@ -8,7 +8,7 @@ const Container = styled.div`
   position: fixed;
   left: 0;
   top: 174px;
-  height: 67vh;
+  height: 80vh;
   overflow: auto;
 `;
 
