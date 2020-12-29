@@ -57,8 +57,6 @@ export const useForm = () => {
     [input, date, state.tasks, dispatch, db, uid]
   );
 
-  console.log(date?.getTime());
-
   return {
     input,
     date,

@@ -7,6 +7,7 @@ type BoxProps = {
   justifyContent?: CSS.Property.JustifyContent;
   alignItems?: CSS.Property.AlignItems;
   margin?: CSS.Property.Margin;
+  padding?: CSS.Property.Padding;
 };
 
 const Container = styled.div<BoxProps>`
@@ -15,6 +16,9 @@ const Container = styled.div<BoxProps>`
   justify-content: ${({ justifyContent }) => justifyContent};
   align-items: ${({ alignItems }) => alignItems};
   margin: ${({ margin }) => margin};
+  padding: ${({ padding }) => padding};
+
+  width: 100%;
 `;
 
 const Box: FC<BoxProps> = ({
@@ -22,6 +26,7 @@ const Box: FC<BoxProps> = ({
   alignItems = "flex-start",
   justifyContent = "flex-start",
   margin,
+  padding,
   children,
 }) => {
   return (
@@ -30,6 +35,7 @@ const Box: FC<BoxProps> = ({
       justifyContent={justifyContent}
       alignItems={alignItems}
       margin={margin}
+      padding={padding}
     >
       {children}
     </Container>

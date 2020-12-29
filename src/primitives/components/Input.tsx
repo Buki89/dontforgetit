@@ -2,10 +2,9 @@ import React, { FC } from "react";
 import styled from "styled-components";
 
 const StyledInput = styled.input`
-  min-width: 500px;
-  min-height: 50px;
+  width: 100%;
   border-radius: 10px;
-  font-size: 2rem;
+  font-size: 1rem;
   outline: none;
 `;
 

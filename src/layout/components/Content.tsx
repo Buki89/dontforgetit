@@ -5,11 +5,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  position: fixed;
-  left: 0;
-  top: 174px;
-  height: 80vh;
-  overflow: auto;
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: 0 2rem;
 `;
 
 const Content: FC = ({ children }) => {

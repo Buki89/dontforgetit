@@ -11,6 +11,8 @@ type Colors = {
   lighterBlue: string;
   yellow: string;
   kaktus: string;
+  ligthGrey: string;
+  secondaryGreen: string;
 };
 
 declare module "styled-components" {
@@ -31,5 +33,7 @@ export const Theme: DefaultTheme = {
     lighterBlue: "#216ba5",
     yellow: "#FAE03C",
     kaktus: "#79C753",
+    ligthGrey: "#a9b7b9",
+    secondaryGreen: "#28e08d",
   },
 };

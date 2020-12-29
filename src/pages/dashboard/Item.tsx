@@ -10,21 +10,20 @@ import { Checkbox, Button } from "../../primitives";
 const Container = styled.div`
   display: flex;
   align-items: center;
-  min-height: 4rem;
-  border-radius: 6px;
-  padding: 0.25rem 2rem;
-  margin: 0.25rem 0;
-  min-width: 60vw;
+  min-height: 3rem;
+  width: 100%;
   justify-content: space-between;
-  //border: 1px inset;
+  margin: 0.5rem 0;
 `;
 
 const Title = styled.p<{ checked: boolean }>`
   font-size: 1.25rem;
   line-height: 1;
   font-weight: 500;
-  color: ${({ checked }) => (checked ? "#028d09" : "#000")};
+  color: ${({ checked, theme }) => (checked ? theme.colors.ligthGrey : "#000")};
   margin-right: 2rem;
+  font-family: "Yanone + Kaffeesatz";
+  text-decoration: ${({ checked }) => checked && "line-through"};
 `;
 
 const Deadline = styled.p`
@@ -78,8 +77,6 @@ const Item: FC<Task> = ({ taskName, completed, id, deadline, createdAt }) => {
   return (
     <Container>
       <Box alignItems="center">
-        <Checkbox onChange={handleChange} checked={checked}></Checkbox>
-
         {edit ? (
           <>
             <input value={value} onChange={handleChangeInput} />
@@ -90,8 +87,8 @@ const Item: FC<Task> = ({ taskName, completed, id, deadline, createdAt }) => {
         )}
       </Box>
       <Box alignItems="center">
-        <Deadline>{formatDeadline(time, deadline)}</Deadline>
-        <Box direction="column">
+        {/* <Deadline>{formatDeadline(time, deadline)}</Deadline> */}
+        {/* <Box direction="column">
           <Button
             margin="0 0 0.125rem"
             type="button"
@@ -103,6 +100,9 @@ const Item: FC<Task> = ({ taskName, completed, id, deadline, createdAt }) => {
           <Button type="button" color="red" onClick={handleDelete}>
             delete
           </Button>
+        </Box> */}
+        <Box justifyContent="flex-end">
+          <Checkbox onChange={handleChange} checked={checked}></Checkbox>
         </Box>
       </Box>
     </Container>
