@@ -6,6 +6,8 @@ import styled from "styled-components";
 const Day = styled.p`
   font-size: 2.5rem;
   line-height: 0.8;
+  font-weight: bold;
+  margin-right: 0.125rem;
 `;
 
 const Header: FC = () => {
@@ -17,7 +19,7 @@ const Header: FC = () => {
   return (
     <Box justifyContent="space-between">
       <div>
-        <Box>
+        <Box alignItems="center">
           <Day>{dayOfTheMonth}</Day>
           <Box direction="column">
             <p>{month}</p>

@@ -4,8 +4,9 @@ import { Task, Type } from "../../store/Reducer";
 import { AppStore } from "../../store/store";
 import { firebase } from "../../firebase/config";
 import Box from "../../primitives/components/Box";
-import { formatDeadline } from "../../helper/formatDeadline";
-import { Checkbox, Button } from "../../primitives";
+//import { formatDeadline } from "../../helper/formatDeadline";
+import { Checkbox } from "../../primitives";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const Container = styled.div`
   display: flex;
@@ -26,33 +27,34 @@ const Title = styled.p<{ checked: boolean }>`
   text-decoration: ${({ checked }) => checked && "line-through"};
 `;
 
-const Deadline = styled.p`
-  font-size: 1rem;
-  line-height: 1.2;
-  color: ${({ theme }) => theme.colors.black};
-  margin-right: 1rem;
-`;
+// const Deadline = styled.p`
+//   font-size: 1rem;
+//   line-height: 1.2;
+//   color: ${({ theme }) => theme.colors.black};
+//   margin-right: 1rem;
+// `;
 
 const Item: FC<Task> = ({ taskName, completed, id, deadline, createdAt }) => {
   const [edit, setEdit] = useState(false);
   const [value, setValue] = useState(taskName);
+  const [showActions, setShowActions] = useState(false);
   const [checked, setChecked] = useState(completed);
   const { state, dispatch } = useContext(AppStore);
 
   const handleChange = useCallback(() => {
     dispatch({
       type: Type.editTask,
-      payload: { id, completed: !checked, taskName: value },
+      payload: { id, completed: checked, taskName: value },
     });
     firebase
       .database()
       .ref(`${state.uid}/tasks/${id}`)
       .update({
         taskName: value,
-        completed: !checked,
+        completed: checked,
       })
       .catch((e) => alert(e));
-    setChecked(!checked);
+    setChecked(checked);
     setEdit(false);
   }, [checked, dispatch, id, state.uid, value]);
 
@@ -71,8 +73,9 @@ const Item: FC<Task> = ({ taskName, completed, id, deadline, createdAt }) => {
     },
     []
   );
-
-  const time = new Date().getTime();
+  const handleClick = useCallback(() => {
+    setShowActions(!showActions);
+  }, [showActions]);
 
   return (
     <Container>
@@ -83,24 +86,19 @@ const Item: FC<Task> = ({ taskName, completed, id, deadline, createdAt }) => {
             <button onClick={handleChange}>Save</button>
           </>
         ) : (
-          <Title checked={checked}>{taskName}</Title>
+          <Title onClick={handleClick} checked={checked}>
+            {taskName}
+          </Title>
         )}
       </Box>
       <Box alignItems="center">
         {/* <Deadline>{formatDeadline(time, deadline)}</Deadline> */}
-        {/* <Box direction="column">
-          <Button
-            margin="0 0 0.125rem"
-            type="button"
-            color="green"
-            onClick={handleEditMenu}
-          >
-            edit
-          </Button>
-          <Button type="button" color="red" onClick={handleDelete}>
-            delete
-          </Button>
-        </Box> */}
+        {showActions && (
+          <>
+            <FaEdit color="green" onClick={handleEditMenu} />
+            <FaTrash color="red" onClick={handleDelete} />
+          </>
+        )}
         <Box justifyContent="flex-end">
           <Checkbox onChange={handleChange} checked={checked}></Checkbox>
         </Box>

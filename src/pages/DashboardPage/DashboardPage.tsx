@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import Content from "../../layout/components/Content";
 import Box from "../../primitives/components/Box";
-import Dashboard from "../dashboard/Dashboard";
+import { Dashboard } from "../../components";
 
 const DashboardPage: FC = () => {
   return (

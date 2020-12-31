@@ -1,9 +1,9 @@
 export type Task = {
     id: string,
-    taskName:string,
     deadline: number;
     createdAt: number;
     completed: boolean;
+    taskName:string,
 } 
 
 export interface State  {
