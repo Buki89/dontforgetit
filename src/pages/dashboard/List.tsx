@@ -6,9 +6,10 @@ type ListProps = {
   tasks: Task[];
   sort: "all" | "completed" | "incompleted";
   page: number;
+  searchPhrase: string;
 };
 
-const List = React.memo(({ tasks, sort, page }: ListProps) => {
+const List = React.memo(({ tasks, sort, page, searchPhrase }: ListProps) => {
   const to = 8 * page;
   const from = to - 8;
 
@@ -31,6 +32,9 @@ const List = React.memo(({ tasks, sort, page }: ListProps) => {
               return index <= to - 1 && index >= from;
             }
             return index <= to - 1 && index >= from;
+          })
+          .filter((task) => {
+            return task.taskName.includes(searchPhrase);
           })
           .map((task) => <Item key={task.id} {...task} />)}
     </>

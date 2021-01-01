@@ -69,6 +69,7 @@ const Dashboard: FC = () => {
     handleDate,
     handleSubmit,
     handleSortBy,
+    handleSearch,
     openModal,
   } = useForm();
 
@@ -123,6 +124,8 @@ const Dashboard: FC = () => {
     );
   }
 
+  console.log(localState.searchPhrase);
+
   return (
     <>
       <Content>
@@ -130,7 +133,7 @@ const Dashboard: FC = () => {
           <Box direction="column" margin="2rem 0 0">
             <Header />
             <Box justifyContent="center">
-              <input />
+              <input value={localState.searchPhrase} onChange={handleSearch} />
             </Box>
 
             <Box justifyContent="center">
@@ -164,6 +167,7 @@ const Dashboard: FC = () => {
               tasks={state.tasks}
               sort={localState.sortBy}
               page={localState.activePage}
+              searchPhrase={localState.searchPhrase}
             />
             {localState.open && (
               <Modal

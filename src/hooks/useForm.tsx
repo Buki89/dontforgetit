@@ -17,13 +17,13 @@ type DashboardState = {
 
 const defaultValues = {
   taskName: "",
-  deadline: undefined,
-  validate: false,
   errorMessage: "",
-  open: false,
-  activePage: 1,
   sortBy: "all",
   searchPhrase: "",
+  deadline: undefined,
+  validate: false,
+  open: false,
+  activePage: 1,
 } as DashboardState;
 
 export const useForm = () => {
@@ -49,7 +49,7 @@ export const useForm = () => {
     [localState]
   );
 
-  const handleDate = useCallback(
+  const handleDeadline = useCallback(
     (event: Date) => setLocalState({ ...localState, deadline: event }),
     [localState]
   );
@@ -64,6 +64,11 @@ export const useForm = () => {
   const handleChangePage = useCallback(
     (page: string) =>
       setLocalState({ ...localState, activePage: parseInt(page, 10) }),
+    [localState]
+  );
+
+  const handleSearch = useCallback(
+    (e) => setLocalState({ ...localState, searchPhrase: e.target.value }),
     [localState]
   );
 
@@ -116,9 +121,10 @@ export const useForm = () => {
   return {
     localState,
     handleSubmit,
-    handleDate,
+    handleDate: handleDeadline,
     handleSortBy,
     handleOnChange,
+    handleSearch,
     handleChangePage,
     openModal,
   };

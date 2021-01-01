@@ -90,8 +90,6 @@ const Item: FC<Task> = ({ taskName, completed, id, deadline, createdAt }) => {
     setShowActions(!showActions);
   }, [showActions]);
 
-  console.log("render item" + id);
-
   return (
     <Container>
       <Box alignItems="center">
