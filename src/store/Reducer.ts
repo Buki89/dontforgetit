@@ -13,7 +13,7 @@ export interface State  {
 
 
 
- export enum Type {addTask = 'ADD_TASK' ,deleteTask = 'DELETE_TASK', editTask = 'EDIT_TASK', setTasks = 'SET_TASKS', setUid =  'SET_UID', setTask = 'SET_TASK'};
+ export enum Type {addTask = 'ADD_TASK' , editCompleted= 'EDIT_COMPLETED' ,deleteTask = 'DELETE_TASK', editTaskName = 'EDIT_TASKNAME', setTasks = 'SET_TASKS', setUid =  'SET_UID', setTask = 'SET_TASK'};
 
 
 export type Actions = {
@@ -29,13 +29,21 @@ export type Actions = {
     type: Type.setUid,
     payload: string;
 } | {
-    type: Type.editTask,
+    type: Type.editTaskName,
+    payload: {
+        id:string,
+        taskName: string,
+    } 
+} | {
+    type: Type.editCompleted,
     payload: {
         id:string,
         completed: boolean,
-        taskName: string;
-    }
-} | {
+    } 
+} 
+
+
+| {
     type: Type.setTask,
     payload:{
         task: Task
@@ -61,15 +69,27 @@ const Reducer = (state: State, action: Actions): State => {
                 return task.id !== action.payload
             })
         }
-        case Type.editTask:
+        case Type.editTaskName:
             return {
                 ...state,
                 tasks: state.tasks.map(task => {
                     if(task.id === action.payload.id){
                         return {
                             ...task,
-                            completed:action.payload.completed,
                             taskName: action.payload.taskName
+                        }
+                    }
+                    return task
+                })
+            }           
+        case Type.editCompleted:
+            return {
+                ...state,
+                tasks: state.tasks.map(task => {
+                    if(task.id === action.payload.id){
+                        return {
+                            ...task,
+                            completed: action.payload.completed
                         }
                     }
                     return task

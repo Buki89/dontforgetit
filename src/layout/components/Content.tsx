@@ -7,7 +7,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   padding: 0 4rem;
   min-width: 35vw;
-  min-height: 90vh;
+  min-height: 83vh;
   position: relative;
   box-shadow: 3px 5px 5px darkslategrey;
 `;

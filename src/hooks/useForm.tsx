@@ -4,16 +4,30 @@ import { v4 as uuidv4 } from "uuid";
 import { Type } from "../store/Reducer";
 import { AppStore } from "../store/store";
 
+type DashboardState = {
+  taskName: string;
+  deadline: Date | undefined;
+  validate: boolean;
+  errorMessage: string;
+  open: boolean;
+  activePage: number;
+  sortBy: "all" | "completed" | "incompleted";
+  searchPhrase: string;
+};
+
+const defaultValues = {
+  taskName: "",
+  deadline: undefined,
+  validate: false,
+  errorMessage: "",
+  open: false,
+  activePage: 1,
+  sortBy: "all",
+  searchPhrase: "",
+} as DashboardState;
+
 export const useForm = () => {
-  const [input, setInput] = useState("");
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [validate, setValidate] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [open, setOpen] = useState(false);
-  const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState<"all" | "completed" | "incompleted">(
-    "all"
-  );
+  const [localState, setLocalState] = useState<DashboardState>(defaultValues);
 
   const uid = firebase.auth().currentUser?.uid;
   const db = firebase.database();
@@ -22,23 +36,35 @@ export const useForm = () => {
   const handleOnChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const input = event.target.value;
-      setInput(input);
+      setLocalState({
+        ...localState,
+        taskName: input,
+      });
     },
-    []
+    [localState]
   );
 
-  const openModal = useCallback(() => setOpen(!open), [open]);
+  const openModal = useCallback(
+    () => setLocalState({ ...localState, open: !localState.open }),
+    [localState]
+  );
 
-  const handleDate = useCallback((event: Date) => setDate(event), []);
+  const handleDate = useCallback(
+    (event: Date) => setLocalState({ ...localState, deadline: event }),
+    [localState]
+  );
 
-  const handleSortBy = useCallback((e) => {
-    setSortBy(e.target.value);
-    setPage(1);
-  }, []);
+  const handleSortBy = useCallback(
+    (e) => {
+      setLocalState({ ...localState, sortBy: e.target.value, activePage: 1 });
+    },
+    [localState]
+  );
 
   const handleChangePage = useCallback(
-    (page: string) => setPage(parseInt(page, 10)),
-    []
+    (page: string) =>
+      setLocalState({ ...localState, activePage: parseInt(page, 10) }),
+    [localState]
   );
 
   const handleSubmit = useCallback(
@@ -47,45 +73,48 @@ export const useForm = () => {
       const Task = {
         id,
         completed: false,
-        deadline: date?.getTime() ?? 0,
+        deadline: localState.deadline?.getTime() ?? 0,
         createdAt: new Date().getTime(),
-        taskName: input,
+        taskName: localState.taskName,
       };
-      const alreadyUsed = state.tasks.some((item) => item.taskName === input);
-      const emptyInput = input.length === 0;
+      const alreadyUsed = state.tasks.some(
+        (item) => item.taskName === localState.taskName
+      );
+      const emptyInput = localState.taskName.length === 0;
 
       e.preventDefault();
 
       if (alreadyUsed) {
-        setValidate(true);
-        setErrorMessage("There is already task with that name");
+        setLocalState({
+          ...localState,
+          validate: true,
+          errorMessage: "There is already task with that name",
+        });
         return;
       }
       if (emptyInput) {
-        setValidate(true);
-        setErrorMessage("Empty field");
+        setLocalState({
+          ...localState,
+          validate: true,
+          errorMessage: "Empty field",
+        });
         return;
       }
       dispatch({ type: Type.setTask, payload: { task: Task } });
-      setValidate(false);
-      setInput("");
-      setDate(undefined);
-      setOpen(!open);
+      setLocalState({
+        ...localState,
+        taskName: "",
+        deadline: undefined,
+        validate: false,
+        open: !localState.open,
+      });
       db.ref(`${uid}/tasks/${id}`).set(Task);
     },
-    [input, date, state.tasks, dispatch, open, db, uid]
+    [localState, state.tasks, dispatch, db, uid]
   );
 
-  console.log(page);
-
   return {
-    input,
-    date,
-    open,
-    page,
-    sortBy,
-    validate,
-    errorMessage,
+    localState,
     handleSubmit,
     handleDate,
     handleSortBy,

@@ -34,13 +34,14 @@ const Pagination: FC<PaginationProps> = ({ page, handleChangePage }) => {
 
   return (
     <Box justifyContent="center">
-      {helperArr().map((item: number) => {
-        return (
-          <NavigationItem type="button" value={item} onClick={changePage}>
-            {item}
-          </NavigationItem>
-        );
-      })}
+      {helperArr().length > 1 &&
+        helperArr().map((item: number) => {
+          return (
+            <NavigationItem type="button" value={item} onClick={changePage}>
+              {item}
+            </NavigationItem>
+          );
+        })}
     </Box>
   );
 };

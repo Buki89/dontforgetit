@@ -8,6 +8,7 @@ type BoxProps = {
   alignItems?: CSS.Property.AlignItems;
   margin?: CSS.Property.Margin;
   padding?: CSS.Property.Padding;
+  height?: CSS.Property.Height;
 };
 
 const Container = styled.div<BoxProps>`
@@ -17,7 +18,7 @@ const Container = styled.div<BoxProps>`
   align-items: ${({ alignItems }) => alignItems};
   margin: ${({ margin }) => margin};
   padding: ${({ padding }) => padding};
-
+  height: ${({ height }) => height};
   width: 100%;
 `;
 
@@ -28,6 +29,7 @@ const Box: FC<BoxProps> = ({
   margin,
   padding,
   children,
+  height,
 }) => {
   return (
     <Container
@@ -36,6 +38,7 @@ const Box: FC<BoxProps> = ({
       alignItems={alignItems}
       margin={margin}
       padding={padding}
+      height={height}
     >
       {children}
     </Container>

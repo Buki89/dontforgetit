@@ -38,16 +38,17 @@ const AddButton = styled.button`
 
 const LoadingContainer = styled.div`
   width: 100%;
-  height: 100%;
+  height: 75vh;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const SortButton = styled.button`
+const SortButton = styled.button<{ selected: boolean }>`
   background-color: ${({ theme }) => theme.colors.white};
   min-width: 6rem;
-  color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme, selected }) =>
+    selected ? theme.colors.black : theme.colors.ligthGrey};
   border: 0;
   font-size: 1rem;
   font-weight: bold;
@@ -62,13 +63,7 @@ const Dashboard: FC = () => {
   const { state, dispatch } = useContext(AppStore);
 
   const {
-    date,
-    errorMessage,
-    input,
-    validate,
-    open,
-    page,
-    sortBy,
+    localState,
     handleOnChange,
     handleChangePage,
     handleDate,
@@ -103,15 +98,19 @@ const Dashboard: FC = () => {
   }, [dispatch, history]);
 
   const pages = (): number => {
-    if (sortBy === "all") {
-      return Math.round(state.tasks.length / 8);
-    } else if (sortBy === "completed") {
-      return Math.round(
-        state.tasks.filter((task) => task.completed === true).length / 8
+    if (localState.sortBy === "all") {
+      return Math.floor(state.tasks.length / 9) + 1;
+    } else if (localState.sortBy === "completed") {
+      return (
+        Math.floor(
+          state.tasks.filter((task) => task.completed === true).length / 9
+        ) + 1
       );
     } else {
-      return Math.round(
-        state.tasks.filter((task) => task.completed === false).length / 8
+      return (
+        Math.floor(
+          state.tasks.filter((task) => task.completed === false).length / 9
+        ) + 1
       );
     }
   };
@@ -124,43 +123,63 @@ const Dashboard: FC = () => {
     );
   }
 
-  console.log(sortBy, pages());
-
   return (
     <>
       <Content>
-        <Box direction="column" margin="2rem 0 0">
-          <Header />
-          <Box justifyContent="center">
-            <SortButton value={"all"} onClick={handleSortBy}>
-              {`All - (${state.tasks.length})`}
-            </SortButton>
-            <SortButton value={"completed"} onClick={handleSortBy}>
-              {`Done - (${
-                state.tasks.filter((task) => task.completed === true).length
-              })`}
-            </SortButton>
-            <SortButton value={"incompleted"} onClick={handleSortBy}>
-              {`In progress - (${
-                state.tasks.filter((task) => task.completed === false).length
-              })`}
-            </SortButton>
-          </Box>
-          <List tasks={state.tasks} sort={sortBy} page={page} />
-          {open && (
-            <Modal
-              date={date}
-              errorMessage={errorMessage}
-              handleDate={handleDate}
-              handleOnChange={handleOnChange}
-              input={input}
-              handleSubmit={handleSubmit}
-              validate={validate}
-            />
-          )}
-        </Box>
+        <Box direction="column" justifyContent="space-between" height="79vh">
+          <Box direction="column" margin="2rem 0 0">
+            <Header />
+            <Box justifyContent="center">
+              <input />
+            </Box>
 
-        <Pagination handleChangePage={handleChangePage} page={pages()} />
+            <Box justifyContent="center">
+              <SortButton
+                selected={localState.sortBy === "all"}
+                value={"all"}
+                onClick={handleSortBy}
+              >
+                {`All - (${state.tasks.length})`}
+              </SortButton>
+              <SortButton
+                selected={localState.sortBy === "completed"}
+                value={"completed"}
+                onClick={handleSortBy}
+              >
+                {`Done - (${
+                  state.tasks.filter((task) => task.completed === true).length
+                })`}
+              </SortButton>
+              <SortButton
+                selected={localState.sortBy === "incompleted"}
+                value={"incompleted"}
+                onClick={handleSortBy}
+              >
+                {`In progress - (${
+                  state.tasks.filter((task) => task.completed === false).length
+                })`}
+              </SortButton>
+            </Box>
+            <List
+              tasks={state.tasks}
+              sort={localState.sortBy}
+              page={localState.activePage}
+            />
+            {localState.open && (
+              <Modal
+                date={localState.deadline}
+                errorMessage={localState.errorMessage}
+                handleDate={handleDate}
+                handleOnChange={handleOnChange}
+                input={localState.taskName}
+                handleSubmit={handleSubmit}
+                validate={localState.validate}
+              />
+            )}
+          </Box>
+
+          <Pagination handleChangePage={handleChangePage} page={pages()} />
+        </Box>
       </Content>
       <AddButton onClick={openModal}>+</AddButton>
     </>

@@ -8,7 +8,7 @@ type ListProps = {
   page: number;
 };
 
-const List = ({ tasks, sort, page }: ListProps) => {
+const List = React.memo(({ tasks, sort, page }: ListProps) => {
   const to = 8 * page;
   const from = to - 8;
 
@@ -16,17 +16,25 @@ const List = ({ tasks, sort, page }: ListProps) => {
     <>
       {tasks.length > 0 &&
         tasks
+          .filter((task) => {
+            if (sort === "completed") {
+              return task.completed === true;
+            } else if (sort === "incompleted") {
+              return task.completed === false;
+            }
+            return task;
+          })
           .filter((task, index) => {
             if (sort === "completed") {
-              return index <= to && index > from && task.completed === true;
+              return index <= to - 1 && index >= from;
             } else if (sort === "incompleted") {
-              return index <= to && index > from && task.completed === false;
+              return index <= to - 1 && index >= from;
             }
-            return index <= to && index > from;
+            return index <= to - 1 && index >= from;
           })
           .map((task) => <Item key={task.id} {...task} />)}
     </>
   );
-};
+});
 
 export default List;
