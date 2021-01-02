@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Box from "../../../primitives/components/Box";
+import { Box } from "../../../primitives";
 import { format } from "date-fns";
 import styled from "styled-components";
 

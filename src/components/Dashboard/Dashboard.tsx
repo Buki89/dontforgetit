@@ -1,8 +1,7 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import List from "../../pages/dashboard/List";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
-import Box from "../../primitives/components/Box";
+import { Box } from "../../primitives";
 import { useForm } from "../../hooks/useForm";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
@@ -10,8 +9,10 @@ import ReactLoading from "react-loading";
 import { AppStore } from "../../store/store";
 import { Task, Type } from "../../store/Reducer";
 import Header from "../../layout/components/Header/Header";
-import Modal from "../../pages/dashboard/Modal";
+import { AddTaskModal } from "..";
 import { Pagination } from "../Pagination";
+import { pages } from "../../helper/pages";
+import { List } from "..";
 
 const Content = styled.div`
   display: flex;
@@ -98,24 +99,6 @@ const Dashboard: FC = () => {
       });
   }, [dispatch, history]);
 
-  const pages = (): number => {
-    if (localState.sortBy === "all") {
-      return Math.floor(state.tasks.length / 9) + 1;
-    } else if (localState.sortBy === "completed") {
-      return (
-        Math.floor(
-          state.tasks.filter((task) => task.completed === true).length / 9
-        ) + 1
-      );
-    } else {
-      return (
-        Math.floor(
-          state.tasks.filter((task) => task.completed === false).length / 9
-        ) + 1
-      );
-    }
-  };
-
   if (loading) {
     return (
       <LoadingContainer>
@@ -123,8 +106,6 @@ const Dashboard: FC = () => {
       </LoadingContainer>
     );
   }
-
-  console.log(localState.searchPhrase);
 
   return (
     <>
@@ -170,7 +151,7 @@ const Dashboard: FC = () => {
               searchPhrase={localState.searchPhrase}
             />
             {localState.open && (
-              <Modal
+              <AddTaskModal
                 date={localState.deadline}
                 errorMessage={localState.errorMessage}
                 handleDate={handleDate}
@@ -182,7 +163,10 @@ const Dashboard: FC = () => {
             )}
           </Box>
 
-          <Pagination handleChangePage={handleChangePage} page={pages()} />
+          <Pagination
+            handleChangePage={handleChangePage}
+            page={pages(state, localState)}
+          />
         </Box>
       </Content>
       <AddButton onClick={openModal}>+</AddButton>

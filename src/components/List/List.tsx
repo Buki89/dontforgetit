@@ -1,6 +1,6 @@
 import React from "react";
+import { Item } from "..";
 import { Task } from "../../store/Reducer";
-import Item from "./Item";
 
 type ListProps = {
   tasks: Task[];
@@ -18,6 +18,9 @@ const List = React.memo(({ tasks, sort, page, searchPhrase }: ListProps) => {
       {tasks.length > 0 &&
         tasks
           .filter((task) => {
+            return task.taskName.includes(searchPhrase);
+          })
+          .filter((task) => {
             if (sort === "completed") {
               return task.completed === true;
             } else if (sort === "incompleted") {
@@ -25,6 +28,7 @@ const List = React.memo(({ tasks, sort, page, searchPhrase }: ListProps) => {
             }
             return task;
           })
+
           .filter((task, index) => {
             if (sort === "completed") {
               return index <= to - 1 && index >= from;
@@ -33,9 +37,7 @@ const List = React.memo(({ tasks, sort, page, searchPhrase }: ListProps) => {
             }
             return index <= to - 1 && index >= from;
           })
-          .filter((task) => {
-            return task.taskName.includes(searchPhrase);
-          })
+
           .map((task) => <Item key={task.id} {...task} />)}
     </>
   );

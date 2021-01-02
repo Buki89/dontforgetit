@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { Task, Type } from "../../store/Reducer";
 import { AppStore } from "../../store/store";
 import { firebase } from "../../firebase/config";
-import Box from "../../primitives/components/Box";
+import { Box } from "../../primitives";
 //import { formatDeadline } from "../../helper/formatDeadline";
 import { Checkbox } from "../../primitives";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { Theme } from "../../theme/theme";
 
 const Container = styled.div`
   display: flex;
@@ -108,8 +109,16 @@ const Item: FC<Task> = ({ taskName, completed, id, deadline, createdAt }) => {
         {/* <Deadline>{formatDeadline(time, deadline)}</Deadline> */}
         {showActions && (
           <>
-            <FaEdit size="1.5rem" color="green" onClick={handleEditMenu} />
-            <FaTrash size="1.5rem" color="red" onClick={handleDelete} />
+            <FaEdit
+              size="1.5rem"
+              color={Theme.colors.lighterBlue}
+              onClick={handleEditMenu}
+            />
+            <FaTrash
+              size="1.2rem"
+              color={Theme.colors.red}
+              onClick={handleDelete}
+            />
           </>
         )}
         <Box justifyContent="flex-end">

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Type } from "../store/Reducer";
 import { AppStore } from "../store/store";
 
-type DashboardState = {
+export type DashboardState = {
   taskName: string;
   deadline: Date | undefined;
   validate: boolean;

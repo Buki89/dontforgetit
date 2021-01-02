@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import styled from "styled-components";
 import { FaTasks } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
-import Box from "../../primitives/components/Box";
+import { Box } from "../../primitives";
 
 const Container = styled.div`
   min-height: 7vh;

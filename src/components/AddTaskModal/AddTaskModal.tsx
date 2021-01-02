@@ -1,6 +1,5 @@
 import React, { FC } from "react";
-import Box from "../../primitives/components/Box";
-import Input from "../../primitives/components/Input";
+import { Box, Input } from "../../primitives";
 import { BsCalendar } from "react-icons/bs";
 import { Button } from "../../primitives";
 import styled from "styled-components";
@@ -34,7 +33,7 @@ const ErrorMessage = styled.p`
   color: #ca2525;
 `;
 
-type ModalProps = {
+type AddTaskModalProps = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDate: (event: Date) => void;
@@ -44,7 +43,7 @@ type ModalProps = {
   validate: boolean;
 };
 
-const Modal: FC<ModalProps> = ({
+const AddTaskModal: FC<AddTaskModalProps> = ({
   handleSubmit,
   input,
   handleOnChange,
@@ -80,4 +79,4 @@ const Modal: FC<ModalProps> = ({
   );
 };
 
-export default Modal;
+export default AddTaskModal;

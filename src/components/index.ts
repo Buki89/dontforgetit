@@ -1,2 +1,5 @@
 export * from './Dashboard'
 export * from './Pagination'
+export * from './Item'
+export * from './List'
+export * from './AddTaskModal'
