@@ -1,9 +1,8 @@
 import React, { FC } from "react";
-import { Box, Input } from "../../primitives";
 import { BsCalendar } from "react-icons/bs";
-import { Button } from "../../primitives";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
+import { Box, Input, Button } from "../../inputs";
 
 const Container = styled.div`
   @keyframes example {

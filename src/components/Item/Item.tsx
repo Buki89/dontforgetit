@@ -3,11 +3,10 @@ import styled from "styled-components";
 import { Task, Type } from "../../store/Reducer";
 import { AppStore } from "../../store/store";
 import { firebase } from "../../firebase/config";
-import { Box } from "../../primitives";
 //import { formatDeadline } from "../../helper/formatDeadline";
-import { Checkbox } from "../../primitives";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Theme } from "../../theme/theme";
+import { Box, Checkbox } from "../../inputs";
 
 const Container = styled.div`
   display: flex;

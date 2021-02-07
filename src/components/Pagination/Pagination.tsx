@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from "react";
 import styled from "styled-components";
-import { Box } from "../../primitives";
+import { Box } from "../../inputs";
 
 const NavigationItem = styled.button`
   border: 1px solid grey;

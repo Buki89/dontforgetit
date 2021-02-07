@@ -1,7 +1,7 @@
 import React, { FC } from "react";
-import { Box } from "../../../primitives";
 import { format } from "date-fns";
 import styled from "styled-components";
+import { Box } from "../../../inputs";
 
 const Day = styled.p`
   font-size: 2.5rem;

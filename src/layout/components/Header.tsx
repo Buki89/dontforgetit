@@ -1,6 +1,6 @@
 import firebase from "firebase";
 import React, { FC, useCallback } from "react";
-import { Button as ButtonBase } from "../../primitives";
+import { Button as ButtonBase } from "../../inputs";
 import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { FaTasks } from "react-icons/fa";

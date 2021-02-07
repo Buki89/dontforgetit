@@ -1,7 +1,6 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
-import { Box } from "../../primitives";
 import { useForm } from "../../hooks/useForm";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
@@ -13,6 +12,7 @@ import { AddTaskModal } from "..";
 import { Pagination } from "../Pagination";
 import { pages } from "../../helper/pages";
 import { List } from "..";
+import { Box } from "../../inputs";
 
 const Content = styled.div`
   display: flex;
